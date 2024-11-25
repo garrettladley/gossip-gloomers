@@ -17,3 +17,10 @@ run-echo:
 	@mv echo maelstrom/
 	@cd maelstrom && ./maelstrom test -w echo --bin echo --node-count 1 --time-limit 10
 	@cd maelstrom && rm echo
+
+.PHONY: run-unique-ids
+run-unique-ids:
+	@go build -o uniqueids ./cmd/uniqueids/main.go
+	@mv uniqueids maelstrom/
+	@cd maelstrom && ./maelstrom test -w unique-ids --bin uniqueids --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition
+	@cd maelstrom && rm uniqueids

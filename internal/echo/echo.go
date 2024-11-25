@@ -1,32 +1,25 @@
 package echo
 
 import (
+	"github.com/garrettladley/gossip-gloomers/internal/message"
 	go_json "github.com/goccy/go-json"
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
-type MessageType string
-
-const (
-	Echo   MessageType = "echo"
-	EchoOk MessageType = "echo_ok"
-)
-
-type EchoRequest struct {
-	Type      MessageType `json:"type"`
-	MessageID uint        `json:"msg_id"`
-	Echo      string      `json:"echo"`
+type Echo struct {
+	message.Message
+	Echo string `json:"echo"`
 }
 
-func Register(n *maelstrom.Node) {
+func New(n *maelstrom.Node) {
 	n.Handle("echo", func(msg maelstrom.Message) error {
-		var er EchoRequest
-		if err := go_json.Unmarshal(msg.Body, &er); err != nil {
+		var echo Echo
+		if err := go_json.Unmarshal(msg.Body, &echo); err != nil {
 			return err
 		}
 
-		er.Type = EchoOk
+		echo.Type = message.EchoOk
 
-		return n.Reply(msg, er)
+		return n.Reply(msg, echo)
 	})
 }
