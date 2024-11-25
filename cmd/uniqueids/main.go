@@ -9,5 +9,7 @@ import (
 )
 
 func main() {
-	log.Fatal(gossipgloomers.Run(echo.New, uniqueids.New))
+	if err := gossipgloomers.Run(echo.New, uniqueids.New); err != nil {
+		log.Fatal(err)
+	}
 }
