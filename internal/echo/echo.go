@@ -12,14 +12,14 @@ type Echo struct {
 }
 
 func New(n *maelstrom.Node) {
-	n.Handle("echo", func(msg maelstrom.Message) error {
+	n.Handle("echo", func(req maelstrom.Message) error {
 		var echo Echo
-		if err := go_json.Unmarshal(msg.Body, &echo); err != nil {
+		if err := go_json.Unmarshal(req.Body, &echo); err != nil {
 			return err
 		}
 
 		echo.Type = message.EchoOk
 
-		return n.Reply(msg, echo)
+		return n.Reply(req, echo)
 	})
 }
